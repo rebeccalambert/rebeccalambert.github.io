@@ -2,6 +2,7 @@ Spectral by HTML5 UP
 html5up.net | @ajlkn
 Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 
+banner photo: Photo by Denys Nevozhai on Unsplash
 
 A big, modern, blocky affair with a mobile-style menu, fully responsive styling,
 and an assortment of pre-styled elements. So, pretty much what you were expecting
