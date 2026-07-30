@@ -2520,6 +2520,7 @@ input, select, textarea {
 		input[type="button"]:disabled,
 		button.disabled,
 		button:disabled,
+		.button.disabled,
 		.button:disabled {
 			pointer-events: none;
 			opacity: 0.25;
