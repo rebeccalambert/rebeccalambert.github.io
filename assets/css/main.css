@@ -2527,6 +2527,31 @@ input, select, textarea {
 			cursor: not-allowed;
 		}
 
+		.tooltip {
+			position: relative;
+		}
+
+			.tooltip::after {
+				content: attr(data-tooltip);
+				position: absolute;
+				bottom: 100%;
+				left: 50%;
+				transform: translateX(-50%);
+				background: rgba(0, 0, 0, 0.8);
+				color: #fff;
+				padding: 0.4em 0.8em;
+				border-radius: 4px;
+				font-size: 0.8em;
+				white-space: nowrap;
+				opacity: 0;
+				pointer-events: none;
+				transition: opacity 0.1s ease-in-out;
+			}
+
+			.tooltip:hover::after {
+				opacity: 1;
+			}
+
 		@media screen and (max-width: 736px) {
 
 			input[type="submit"],
