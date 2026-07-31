@@ -1,4 +1,4 @@
-Rebecca Lambert's Portfolio
+Rebecca Lai's Portfolio
 rebeccalambert.github.io
 
 My personal portfolio site, showcasing my background and projects.
