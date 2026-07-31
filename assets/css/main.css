@@ -2513,11 +2513,19 @@ input, select, textarea {
 			order: 1;
 			border-radius: 0;
 			width: 40%;
+			aspect-ratio: 1071 / 661;
 		}
 
 			.spotlight .image img {
 				border-radius: 0;
 				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				display: block;
+			}
+
+			.spotlight .image.contain img {
+				object-fit: contain;
 			}
 
 		.spotlight .content {
