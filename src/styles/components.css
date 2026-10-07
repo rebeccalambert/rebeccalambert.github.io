@@ -144,6 +144,9 @@
   border-radius: var(--radius);
   width: 100%;
   height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  object-position: top;
 }
 
 .project-card h3 {
@@ -251,8 +254,10 @@
 .about__photo {
   border-radius: var(--radius);
   width: 100%;
+  height: auto;
   aspect-ratio: 1;
   object-fit: cover;
+  object-position: center 20%;
 }
 
 /* Contact */
