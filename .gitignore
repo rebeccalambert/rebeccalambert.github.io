@@ -1,1 +1,13 @@
 .DS_Store
+
+# Build output / deps
+node_modules
+dist
+dist-ssr
+*.local
+*.tsbuildinfo
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
