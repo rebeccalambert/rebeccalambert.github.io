@@ -45,7 +45,7 @@ export interface Project {
   repoUrl: string;
   demoUrl?: string;
   demoDisabledReason?: string;
-  screenshot?: { src: string; alt: string };
+  screenshot?: { src: string; alt: string; width: number; height: number };
   note?: string;
 }
 
@@ -65,7 +65,7 @@ export const projects: Project[] = [
     stack: 'React, TypeScript',
     repoUrl: 'https://github.com/rebeccalambert/daily-tracker',
     demoUrl: 'https://rebeccalambert.github.io/daily-tracker/',
-    screenshot: { src: '/images/dailytracker.png', alt: 'Screenshot of the Daily Tracker daily planning view' },
+    screenshot: { src: '/images/dailytracker.webp', alt: 'Screenshot of the Daily Tracker daily planning view', width: 640, height: 1022 },
   },
   {
     name: 'RainFlix',
@@ -74,7 +74,7 @@ export const projects: Project[] = [
     stack: 'Ruby on Rails, JavaScript, React/Redux',
     repoUrl: 'https://github.com/rebeccalambert/Rainflix',
     demoDisabledReason: 'Demo offline — see code',
-    screenshot: { src: '/images/rainflix.png', alt: 'Screenshot of the RainFlix category browsing page' },
+    screenshot: { src: '/images/rainflix.webp', alt: 'Screenshot of the RainFlix category browsing page', width: 800, height: 494 },
   },
 ];
 

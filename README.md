@@ -54,7 +54,7 @@ Pushes to `master` run `.github/workflows/deploy.yml`, which builds the site and
 ## Featured projects
 
 - [ClauseCheck](https://github.com/rebeccalambert/clausecheck): a tool-using LLM agent that answers contract questions and cites its sources, with an eval suite that catches ungrounded citations.
-- RainFlix: a movie browsing app.
+- RainFlix: a video streaming app organized by category (Rails, React/Redux).
 
 ## Contact
 

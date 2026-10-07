@@ -8,7 +8,16 @@ export default function ProjectCard({ project, visual }: { project: Project; vis
     <article className="project-card">
       <div className="project-card__visual">
         {visual}
-        {!visual && screenshot && <img src={screenshot.src} alt={screenshot.alt} loading="lazy" />}
+        {!visual && screenshot && (
+          <img
+            src={screenshot.src}
+            alt={screenshot.alt}
+            width={screenshot.width}
+            height={screenshot.height}
+            loading="lazy"
+            decoding="async"
+          />
+        )}
       </div>
       <div className="project-card__body">
         <h3>{name}</h3>
