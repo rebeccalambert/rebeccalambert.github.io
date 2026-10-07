@@ -1,6 +1,6 @@
 # Portfolio redesign: project brief
 
-Owner: Rebecca Lai. Site: https://rebeccalambert.github.io (GitHub Pages, user site, public repo).
+Owner: Rebecca Lai. Site: https://rebeccalai.portfolio (GitHub Pages, user site, public repo).
 Goal: a fast, accessible, modern portfolio that gets frontend/full-stack interviews. Audience: recruiters and hiring managers for frontend and full-stack roles. Recruiters give it about 30 seconds.
 
 ## Ground rules
