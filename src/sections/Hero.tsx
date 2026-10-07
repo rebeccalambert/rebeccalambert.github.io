@@ -3,7 +3,7 @@ export default function Hero() {
     <section className="hero" aria-label="Introduction">
       <div className="hero__inner">
         <h1>Rebecca Lai</h1>
-        <p className="hero__title">Frontend Software Engineer</p>
+        <p className="hero__title">Software Engineer</p>
         <ul className="hero__links">
           <li>
             <a href="/images/RebeccaLai_Resume_2026.pdf" download="RebeccaLai_Resume">

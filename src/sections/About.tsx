@@ -5,7 +5,7 @@ export default function About() {
       <div className="about__inner">
         <img className="about__photo" src="/images/me.webp" alt="Portrait of Rebecca Lai" width={381} height={420} />
         <p>
-          Frontend engineer, formerly at LinkedIn (Notifications) and Pilotly. I build React and TypeScript
+          Software engineer, formerly at LinkedIn (Notifications) and Pilotly. I build React and TypeScript
           interfaces with accessibility and testing built in, and I like working close to the people who use
           them. Based in the Chicago area.
         </p>
