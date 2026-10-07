@@ -11,3 +11,6 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+# Private planning notes (local only)
+PROJECT_BRIEF.md
