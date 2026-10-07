@@ -143,6 +143,7 @@
 .project-card__visual img {
   border-radius: var(--radius);
   width: 100%;
+  height: auto;
 }
 
 .project-card h3 {
