@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
+import { stats } from '../data/content';
 import { gsap, prefersMotion, useGSAP } from '../lib/gsap';
 import FilterChips from './FilterChips';
 import { filterLabel, type FeedFilter } from './filters';
 import { Flip } from './gsapPlugins';
+import ImpactBubbles from './ImpactBubbles';
 import NotificationItem from './NotificationItem';
 import { buildNotifications, type PlayNotification } from './notifications';
 
@@ -29,7 +31,10 @@ export default function Feed() {
   // of change it was — the two animate differently.
   const pendingFlip = useRef<{ state: Flip.FlipState; kind: 'filter' | 'expand' } | null>(null);
 
-  const isShown = (category: string) => filter === 'all' || filter === category;
+  // The Impact filter swaps the list for the bubbles view; its rows Flip out
+  // like any other filtered-out rows.
+  const showBubbles = filter === 'impact';
+  const isShown = (category: string) => !showBubbles && (filter === 'all' || filter === category);
   const shownCount = notifications.filter((n) => isShown(n.category)).length;
   const isUnread = (n: PlayNotification) => n.unread && !readIds.has(n.id);
   const unreadNow = notifications.filter(isUnread).length;
@@ -175,9 +180,11 @@ export default function Feed() {
       </header>
       <FilterChips active={filter} onChange={changeFilter} />
       <p className="visually-hidden" aria-live="polite">
-        {filter === 'all'
-          ? `Showing all ${shownCount} notifications`
-          : `Showing ${shownCount} ${filterLabel(filter)} notifications`}
+        {showBubbles
+          ? `Showing ${stats.length} Impact stats`
+          : filter === 'all'
+            ? `Showing all ${shownCount} notifications`
+            : `Showing ${shownCount} ${filterLabel(filter)} notifications`}
       </p>
       <ol className="play-feed__list">
         {notifications.map((notification) => (
@@ -192,6 +199,7 @@ export default function Feed() {
           />
         ))}
       </ol>
+      {showBubbles && <ImpactBubbles />}
     </section>
   );
 }

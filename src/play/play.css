@@ -403,3 +403,79 @@
   padding: var(--space-6) var(--space-3);
   color: var(--color-text-muted);
 }
+
+/* Impact bubbles view (mockup D collage). */
+.impact-view {
+  padding: var(--space-3) var(--space-4) var(--space-5);
+}
+
+.impact-view__hint {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.bubbles {
+  position: relative;
+  height: 28rem;
+}
+
+.bubble {
+  position: absolute;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.bubble:active {
+  cursor: grabbing;
+}
+
+.bubble__shape {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  /* Override .is-interactive's transform transition and hover nudge — GSAP
+     animates this element's transform, and CSS would fight it. */
+  transition: box-shadow var(--transition-fast);
+}
+
+.bubble__shape.is-interactive:hover {
+  transform: none;
+}
+
+.bubble:active .bubble__shape {
+  box-shadow: 7px 7px 0 var(--play-ink);
+}
+
+.bubble__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  max-width: 78%;
+  text-align: center;
+}
+
+.bubble__count {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 1.1;
+  /* Fixed-width digits so the count-up doesn't jitter. */
+  font-variant-numeric: tabular-nums;
+}
+
+.bubble__label {
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.bubble__source {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
