@@ -479,3 +479,163 @@
   font-weight: 700;
   color: var(--color-text-muted);
 }
+
+/* Career path view (mockup D winding timeline). */
+.career-view {
+  padding: var(--space-3) var(--space-4) var(--space-5);
+}
+
+.career-view__hint {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.career-path {
+  position: relative;
+  margin: var(--space-5) 0 var(--space-6);
+}
+
+.career-path svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.career-path__ghost {
+  fill: none;
+  stroke: var(--color-border);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 2 14;
+}
+
+.career-path__line {
+  fill: none;
+  stroke: url(#career-gradient);
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+
+.career-path__marker circle {
+  fill: var(--candy-pink);
+  stroke: var(--play-ink);
+  stroke-width: 3;
+}
+
+.career-path__marker .career-path__marker-dot {
+  fill: var(--color-bg-raised);
+  stroke: none;
+}
+
+.career-path__stops {
+  position: absolute;
+  inset: 0;
+}
+
+/* Each stop is a zero-size anchor exactly on its point; the dot and label are
+   offset with `translate`, which GSAP's transform tweens never touch. */
+.career-stop {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.career-stop:focus-visible {
+  outline: none;
+}
+
+.career-stop__dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.4rem;
+  height: 1.4rem;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: var(--color-bg-raised);
+  border: 3px solid var(--play-ink);
+  transition: background-color var(--transition-fast), scale var(--transition-fast);
+}
+
+.career-stop__text {
+  position: absolute;
+  left: 0;
+  top: 1.3rem;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  max-width: 9rem;
+  padding: var(--space-1) var(--space-2);
+  border-radius: 10px;
+  text-align: center;
+  line-height: 1.25;
+}
+
+.career-stop--above .career-stop__text {
+  top: auto;
+  bottom: 1.3rem;
+}
+
+.career-stop__label {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.career-stop__period {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.career-stop:hover .career-stop__dot {
+  scale: 1.2;
+}
+
+.career-stop[aria-pressed='true'] .career-stop__dot {
+  background: var(--color-accent);
+  scale: 1.25;
+}
+
+.career-stop[aria-pressed='true'] .career-stop__text {
+  background: var(--candy-lilac);
+}
+
+.career-stop:focus-visible .career-stop__text {
+  outline: 3px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.career-detail {
+  padding: var(--space-4);
+  border-radius: 18px;
+  background: var(--color-bg);
+}
+
+.career-detail h3 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-lg);
+}
+
+.career-detail__period {
+  margin-left: var(--space-1);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.career-detail__list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.career-detail__list li {
+  line-height: 1.5;
+}

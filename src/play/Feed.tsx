@@ -1,9 +1,10 @@
 import { useRef, useState } from 'react';
-import { stats } from '../data/content';
+import { stats, timeline } from '../data/content';
 import { gsap, prefersMotion, useGSAP } from '../lib/gsap';
 import FilterChips from './FilterChips';
 import { filterLabel, type FeedFilter } from './filters';
 import { Flip } from './gsapPlugins';
+import CareerPath from './CareerPath';
 import ImpactBubbles from './ImpactBubbles';
 import NotificationItem from './NotificationItem';
 import { buildNotifications, type PlayNotification } from './notifications';
@@ -31,10 +32,12 @@ export default function Feed() {
   // of change it was — the two animate differently.
   const pendingFlip = useRef<{ state: Flip.FlipState; kind: 'filter' | 'expand' } | null>(null);
 
-  // The Impact filter swaps the list for the bubbles view; its rows Flip out
-  // like any other filtered-out rows.
+  // Impact and Career swap the list for their showpiece views; their rows
+  // Flip out like any other filtered-out rows.
   const showBubbles = filter === 'impact';
-  const isShown = (category: string) => !showBubbles && (filter === 'all' || filter === category);
+  const showCareer = filter === 'career';
+  const isShown = (category: string) =>
+    !showBubbles && !showCareer && (filter === 'all' || filter === category);
   const shownCount = notifications.filter((n) => isShown(n.category)).length;
   const isUnread = (n: PlayNotification) => n.unread && !readIds.has(n.id);
   const unreadNow = notifications.filter(isUnread).length;
@@ -182,7 +185,9 @@ export default function Feed() {
       <p className="visually-hidden" aria-live="polite">
         {showBubbles
           ? `Showing ${stats.length} Impact stats`
-          : filter === 'all'
+          : showCareer
+            ? `Showing career timeline, ${timeline.length} stops`
+            : filter === 'all'
             ? `Showing all ${shownCount} notifications`
             : `Showing ${shownCount} ${filterLabel(filter)} notifications`}
       </p>
@@ -200,6 +205,7 @@ export default function Feed() {
         ))}
       </ol>
       {showBubbles && <ImpactBubbles />}
+      {showCareer && <CareerPath />}
     </section>
   );
 }
