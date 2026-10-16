@@ -1,10 +1,29 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useSyncExternalStore } from 'react';
 
 // sessionStorage, not localStorage: a recruiter coming back later should land
 // on the classic view, but a reload mid-visit shouldn't kick you out of play mode.
 const STORAGE_KEY = 'play-mode';
 
+/** Play mode is desktop-only: its layouts and drag interactions need the width. */
+export const PLAY_MODE_MEDIA = '(min-width: 1024px)';
+
+function screenFitsPlayMode(): boolean {
+  return window.matchMedia(PLAY_MODE_MEDIA).matches;
+}
+
+function subscribeToScreenSize(onChange: () => void): () => void {
+  const query = window.matchMedia(PLAY_MODE_MEDIA);
+  query.addEventListener('change', onChange);
+  return () => query.removeEventListener('change', onChange);
+}
+
+/** True while the viewport is wide enough for Play mode; updates on resize. */
+export function useCanPlay(): boolean {
+  return useSyncExternalStore(subscribeToScreenSize, screenFitsPlayMode);
+}
+
 export function getInitialPlayMode(): boolean {
+  if (!screenFitsPlayMode()) return false;
   try {
     return sessionStorage.getItem(STORAGE_KEY) === 'on';
   } catch {
@@ -24,6 +43,7 @@ export function applyPlayMode(isPlayMode: boolean): void {
 
 interface PlayModeContextValue {
   isPlayMode: boolean;
+  canPlay: boolean;
   setPlayMode: (isPlayMode: boolean) => void;
 }
 

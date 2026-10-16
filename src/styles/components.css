@@ -35,6 +35,7 @@
   border-radius: 999px;
   padding: var(--space-2) var(--space-3);
   cursor: pointer;
+  white-space: nowrap;
   will-change: transform;
 }
 
@@ -56,6 +57,45 @@
   background: rgb(255 255 255 / 0.55);
   border-radius: 999px;
   padding: 0 var(--space-2);
+}
+
+/* Small screens: muted, but text stays at full AA contrast — it's still
+   telling you something, just not inviting a click. */
+.play-toggle-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.play-toggle--blocked {
+  background: var(--color-bg-raised);
+  color: var(--color-text-muted);
+  border: 2px dashed var(--color-border);
+  cursor: help;
+}
+
+.play-toggle--blocked .play-toggle__state {
+  background: var(--color-border);
+  color: var(--color-text);
+}
+
+.play-toggle__hint {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  z-index: 10;
+  width: max-content;
+  max-width: 15rem;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  background: var(--color-inverse-bg);
+  color: var(--color-inverse-text);
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.25);
+}
+
+.play-toggle__hint[hidden] {
+  display: none;
 }
 
 /* Hero */
