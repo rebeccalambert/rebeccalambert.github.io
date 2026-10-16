@@ -375,3 +375,41 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Play mode load failure (PlayModeErrorBoundary). Lives here, not in
+   play.css, because play.css arrives with the chunk that failed. */
+.play-error {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-3);
+}
+
+.play-error h2 {
+  font-size: var(--text-xl);
+  margin: 0 0 var(--space-2);
+}
+
+.play-error p {
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.play-error__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.play-error__actions button {
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg-raised);
+  cursor: pointer;
+}
+
+.play-error__actions button:first-child {
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+  border-color: transparent;
+}

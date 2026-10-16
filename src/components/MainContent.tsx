@@ -2,6 +2,7 @@ import { lazy, Suspense, useLayoutEffect, useRef, useState } from 'react';
 import { gsap, prefersMotion, useGSAP } from '../lib/gsap';
 import { applyDocumentMode, usePlayMode } from '../lib/playMode';
 import { loadPlayMode } from '../play/loadPlayMode';
+import PlayModeErrorBoundary from './PlayModeErrorBoundary';
 import About from '../sections/About';
 import Contact from '../sections/Contact';
 import CustomerWork from '../sections/CustomerWork';
@@ -17,7 +18,7 @@ const PlayMode = lazy(loadPlayMode);
  * has animated out, so the two views never overlap.
  */
 export default function MainContent() {
-  const { isPlayMode } = usePlayMode();
+  const { isPlayMode, setPlayMode } = usePlayMode();
   const [showPlay, setShowPlay] = useState(isPlayMode);
   const mainRef = useRef<HTMLElement>(null);
   const hasSwapped = useRef(false);
@@ -73,9 +74,11 @@ export default function MainContent() {
   return (
     <main id="main" ref={mainRef}>
       {showPlay ? (
-        <Suspense fallback={<p className="play-loading">Loading Play mode…</p>}>
-          <PlayMode />
-        </Suspense>
+        <PlayModeErrorBoundary onBackToClassic={() => setPlayMode(false)}>
+          <Suspense fallback={<p className="play-loading">Loading Play mode…</p>}>
+            <PlayMode />
+          </Suspense>
+        </PlayModeErrorBoundary>
       ) : (
         <>
           <Hero />

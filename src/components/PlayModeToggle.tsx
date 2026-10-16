@@ -5,7 +5,8 @@ import { loadPlayMode } from '../play/loadPlayMode';
 
 // Hovering or focusing the toggle starts downloading the Play chunk, so it's
 // usually ready by the time the exit animation finishes. Errors are ignored
-// here; React.lazy retries the import and surfaces any real failure.
+// here: a failed import stays failed for this page, so the real load fails too
+// and PlayModeErrorBoundary offers a reload.
 function prefetchPlayMode() {
   loadPlayMode().catch(() => {});
 }
