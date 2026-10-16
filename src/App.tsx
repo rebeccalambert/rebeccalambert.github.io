@@ -1,3 +1,5 @@
+import PlayModeProvider from './components/PlayModeProvider';
+import PlayModeToggle from './components/PlayModeToggle';
 import SkipLink from './components/SkipLink';
 import ThemeToggle from './components/ThemeToggle';
 import About from './sections/About';
@@ -9,13 +11,16 @@ import Projects from './sections/Projects';
 
 export default function App() {
   return (
-    <>
+    <PlayModeProvider>
       <SkipLink />
       <header className="site-header">
         <a className="site-header__name" href="#main">
           Rebecca Lai
         </a>
-        <ThemeToggle />
+        <div className="site-header__actions">
+          <PlayModeToggle />
+          <ThemeToggle />
+        </div>
       </header>
       <main id="main">
         <Hero />
@@ -28,6 +33,6 @@ export default function App() {
       <footer className="site-footer">
         <p>&copy; {new Date().getFullYear()} Rebecca Lai</p>
       </footer>
-    </>
+    </PlayModeProvider>
   );
 }
