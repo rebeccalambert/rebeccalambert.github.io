@@ -99,7 +99,7 @@ export default function PlayModeToggle() {
       </button>
       {!canPlay && (
         <span role="tooltip" id={hintId} className="play-toggle__hint" hidden={!showHint}>
-          Play mode needs a wider screen — try it on a desktop browser.
+          Play mode needs a wider screen.
         </span>
       )}
     </span>
