@@ -115,8 +115,6 @@
   font-weight: 700;
   color: var(--color-accent);
   margin: 0 0 var(--space-1);
-  /* Fixed-width digits so the play-mode count-up doesn't jitter. */
-  font-variant-numeric: tabular-nums;
 }
 
 .stat-tile__label {
@@ -137,14 +135,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-}
-
-/* Play mode only — a progress-style bar above the entries that GSAP draws in. */
-.timeline__track {
-  height: 4px;
-  margin-bottom: var(--space-3);
-  border-radius: 999px;
-  background: linear-gradient(90deg, #ff8ad1, #b794ff 50%, var(--color-accent));
 }
 
 .timeline__item {
