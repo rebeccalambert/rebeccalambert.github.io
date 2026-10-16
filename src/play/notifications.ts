@@ -91,9 +91,10 @@ const careerItem = (entry: TimelineEntry): FeedItem => ({
 
 /**
  * Builds the Play mode feed from content.ts — same facts as the classic view,
- * told oldest to newest: each career stop, then the impact, stories, and
- * projects tied to it (same matching as the Career view), then any projects
- * not tied to a job, oldest first.
+ * newest first like a real notification feed. It's assembled oldest to newest
+ * (each career stop, then the impact, stories, and projects tied to it — same
+ * matching as the Career view — then projects not tied to a job) and then
+ * reversed, so each job sits below the work that came out of it.
  */
 export function buildNotifications(): PlayNotification[] {
   const items: FeedItem[] = [];
@@ -113,5 +114,5 @@ export function buildNotifications(): PlayNotification[] {
 
   // Every row that opens starts unread, and only those: opening is how a row
   // gets read, so every dot can be cleared by mouse or keyboard.
-  return items.map((item) => ({ ...item, unread: item.detail !== undefined }));
+  return items.reverse().map((item) => ({ ...item, unread: item.detail !== undefined }));
 }
