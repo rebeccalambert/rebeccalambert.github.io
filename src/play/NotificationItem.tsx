@@ -74,11 +74,7 @@ export default function NotificationItem({
           <NotificationDetail id={detailId} detail={detail} expanded={expanded} />
         </>
       ) : (
-        // Mouse convenience only: these rows have nothing to open, so they're
-        // not buttons. Keyboard users clear them with the feed's "Mark all read".
-        <div className="note__row" onClick={() => onRead(id)}>
-          {rowContent}
-        </div>
+        <div className="note__row">{rowContent}</div>
       )}
     </li>
   );

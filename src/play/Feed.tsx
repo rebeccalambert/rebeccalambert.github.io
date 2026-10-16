@@ -54,11 +54,14 @@ export default function Feed() {
       gsap.set('.play-feed__badge', { autoAlpha: 0, scale: 0.5 });
 
       const tl = gsap.timeline({ delay: 0.5, onComplete: onIntroComplete });
+      let unreadSoFar = 0;
       items.forEach((item, i) => {
         const at = i < SLOW_ITEMS ? i * SLOW_GAP : SLOW_ITEMS * SLOW_GAP + (i - SLOW_ITEMS) * FAST_GAP;
         tl.to(item, { autoAlpha: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.8)' }, at);
-        if (i >= unreadCount) return;
-        tl.call(() => setBadgeCount(i + 1), [], at)
+        // Unread rows aren't necessarily first in the feed — count as they arrive.
+        if (!notifications[i].unread) return;
+        const count = ++unreadSoFar;
+        tl.call(() => setBadgeCount(count), [], at)
           .to('.play-feed__bell', { keyframes: { rotation: [0, -22, 16, -8, 0] }, duration: 0.38 }, at)
           .fromTo(
             '.play-feed__badge',

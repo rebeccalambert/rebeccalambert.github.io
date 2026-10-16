@@ -257,14 +257,6 @@
   background-color: color-mix(in srgb, var(--candy-lilac) 22%, transparent);
 }
 
-.note__row:not(.note__row--button) {
-  cursor: default;
-}
-
-.note--unread .note__row:not(.note__row--button) {
-  cursor: pointer;
-}
-
 .note__row {
   display: grid;
   grid-template-columns: 3rem 1fr auto;

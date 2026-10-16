@@ -36,8 +36,6 @@ export const CATEGORY_ICONS: Record<NotificationCategory, string> = {
   career: '💼',
 };
 
-/** How many of the newest items start unread — enough to make the badge and dots meaningful. */
-const UNREAD_COUNT = 5;
 
 // Feed items reuse the classic copy verbatim; only the first sentence is shown
 // in the feed, with the full text coming back in the detail view.
@@ -81,5 +79,7 @@ export function buildNotifications(): PlayNotification[] {
     })),
   ];
 
-  return items.map((item, index) => ({ ...item, unread: index < UNREAD_COUNT }));
+  // Every row that opens starts unread, and only those: opening is how a row
+  // gets read, so every dot can be cleared by mouse or keyboard.
+  return items.map((item) => ({ ...item, unread: item.detail !== undefined }));
 }
