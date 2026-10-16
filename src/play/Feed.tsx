@@ -1,5 +1,8 @@
 import { useRef, useState } from 'react';
 import { gsap, prefersMotion, useGSAP } from '../lib/gsap';
+import FilterChips from './FilterChips';
+import { filterLabel, type FeedFilter } from './filters';
+import { Flip } from './gsapPlugins';
 import NotificationItem from './NotificationItem';
 import { buildNotifications } from './notifications';
 
@@ -19,6 +22,11 @@ export default function Feed() {
   // Reduced motion: no intro at all — everything is simply there.
   const [introDone, setIntroDone] = useState(() => !prefersMotion());
   const [badgeCount, setBadgeCount] = useState(() => (introDone ? unreadCount : 0));
+  const [filter, setFilter] = useState<FeedFilter>('all');
+  const flipState = useRef<Flip.FlipState | null>(null);
+
+  const isShown = (category: string) => filter === 'all' || filter === category;
+  const shownCount = notifications.filter((n) => isShown(n.category)).length;
 
   // Runs when the intro ends, whether it played out or was skipped.
   const onIntroComplete = () => {
@@ -66,6 +74,33 @@ export default function Feed() {
     { scope: feedRef },
   );
 
+  // Filtering: every item stays rendered and non-matching ones get `hidden`,
+  // so Flip can record positions before the change and animate leavers out,
+  // enterers in, and survivors sliding to their new spots.
+  const changeFilter = (next: FeedFilter) => {
+    if (next === filter || !feedRef.current) return;
+    if (prefersMotion()) flipState.current = Flip.getState(feedRef.current.querySelectorAll('.note'));
+    setFilter(next);
+  };
+
+  useGSAP(
+    () => {
+      const state = flipState.current;
+      if (!state) return;
+      flipState.current = null;
+      Flip.from(state, {
+        duration: 0.5,
+        ease: 'power2.inOut',
+        absolute: true,
+        nested: true,
+        onEnter: (els) =>
+          gsap.fromTo(els, { autoAlpha: 0, scale: 0.92 }, { autoAlpha: 1, scale: 1, duration: 0.4, delay: 0.15 }),
+        onLeave: (els) => gsap.to(els, { autoAlpha: 0, scale: 0.92, duration: 0.25 }),
+      });
+    },
+    { scope: feedRef, dependencies: [filter] },
+  );
+
   return (
     <section className="play-feed" aria-labelledby="play-feed-heading" ref={feedRef}>
       <header className="play-feed__header">
@@ -76,16 +111,29 @@ export default function Feed() {
           Notifications <span className="play-feed__badge">{badgeCount} new</span>
         </h2>
         {!introDone && (
-          <button ref={skipRef} type="button" className="play-feed__skip is-interactive"
+          <button
+            ref={skipRef}
+            type="button"
+            className="play-feed__skip is-interactive"
             onClick={() => introRef.current?.progress(1)}
           >
             Skip intro
           </button>
         )}
       </header>
+      <FilterChips active={filter} onChange={changeFilter} />
+      <p className="visually-hidden" aria-live="polite">
+        {filter === 'all'
+          ? `Showing all ${shownCount} notifications`
+          : `Showing ${shownCount} ${filterLabel(filter)} notifications`}
+      </p>
       <ol className="play-feed__list">
         {notifications.map((notification) => (
-          <NotificationItem key={notification.id} notification={notification} />
+          <NotificationItem
+            key={notification.id}
+            notification={notification}
+            hidden={!isShown(notification.category)}
+          />
         ))}
       </ol>
     </section>
