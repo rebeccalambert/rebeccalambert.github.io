@@ -17,7 +17,7 @@ export default function NotificationItem({
   onToggle: (id: string) => void;
   onRead: (id: string) => void;
 }) {
-  const { id, category, title, body, meta, detail, icon } = notification;
+  const { id, category, title, body, meta, detail, icon, education } = notification;
   const detailId = `${id}-detail`;
 
   // Spans (not <p>) because this content sits inside a <button> when the row
@@ -54,6 +54,7 @@ export default function NotificationItem({
       className={unread ? 'note note--unread' : 'note'}
       data-id={id}
       data-category={category}
+      data-education={education || undefined}
       data-expanded={expanded || undefined}
       hidden={hidden}
     >

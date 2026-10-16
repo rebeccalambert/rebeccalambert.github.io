@@ -14,6 +14,8 @@ export interface PlayNotification {
   meta: string;
   /** Overrides the category icon, e.g. 🎓 for school entries in Career. */
   icon?: string;
+  /** School or training (from the timeline's education flag) — styled lilac. */
+  education?: boolean;
   unread: boolean;
   /** Full content shown when the row is expanded. Only set when it adds something the row doesn't already show. */
   detail?: NotificationDetail;
@@ -90,6 +92,7 @@ const careerItem = (entry: TimelineEntry): FeedItem => ({
   body: '',
   meta: `Career · ${entry.period}`,
   icon: entry.education ? '🎓' : undefined,
+  education: entry.education,
 });
 
 /**

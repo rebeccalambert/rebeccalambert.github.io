@@ -295,6 +295,8 @@
 .note[data-category='impact'] .note__icon { background: var(--candy-sky); }
 .note[data-category='work'] .note__icon { background: var(--candy-mint); }
 .note[data-category='career'] .note__icon { background: var(--candy-butter); }
+/* Same lilac as the Email button, so school entries read apart from jobs. */
+.note[data-education] .note__icon { background: var(--candy-lilac); }
 
 .note__line,
 .note__meta {
