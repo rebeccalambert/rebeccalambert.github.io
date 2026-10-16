@@ -168,6 +168,97 @@
   margin: 0;
 }
 
+.play-feed__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.play-feed__header h2:focus {
+  outline: none;
+}
+
+.play-feed__bell {
+  display: inline-block;
+  margin-right: 0.15em;
+  transform-origin: 50% 10%;
+}
+
+.play-feed__badge {
+  display: inline-block;
+  margin-left: var(--space-1);
+  padding: 0.1em 0.6em;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+.play-feed__skip {
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  background: var(--candy-butter);
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+/* Notification rows (mockup E). */
+.note {
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.note:last-child {
+  border-bottom: none;
+}
+
+.note--unread {
+  background: color-mix(in srgb, var(--candy-lilac) 22%, transparent);
+}
+
+.note__icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 14px;
+  font-size: 1.35rem;
+}
+
+.note[data-category='projects'] .note__icon { background: var(--candy-pink); }
+.note[data-category='impact'] .note__icon { background: var(--candy-sky); }
+.note[data-category='work'] .note__icon { background: var(--candy-mint); }
+.note[data-category='career'] .note__icon { background: var(--candy-butter); }
+
+.note__text p {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.note__meta {
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.note__dot {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 18%, transparent);
+}
+
 .play-loading {
   max-width: var(--max-width);
   margin: 0 auto;

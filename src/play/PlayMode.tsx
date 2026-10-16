@@ -5,6 +5,7 @@ import './play.css';
 import { useRef } from 'react';
 import ProfileLinks from '../components/ProfileLinks';
 import { gsap, MOTION_OK, useGSAP } from '../lib/gsap';
+import Feed from './Feed';
 
 export default function PlayMode() {
   const layoutRef = useRef<HTMLDivElement>(null);
@@ -33,13 +34,7 @@ export default function PlayMode() {
         <ProfileLinks className="play-profile__links" linkClassName="is-interactive" />
       </aside>
 
-      <section className="play-feed" aria-labelledby="play-feed-heading">
-        <header className="play-feed__header">
-          <h2 id="play-feed-heading">
-            <span aria-hidden="true">🔔</span> Notifications
-          </h2>
-        </header>
-      </section>
+      <Feed />
     </div>
   );
 }
