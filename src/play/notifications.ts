@@ -37,6 +37,15 @@ export const CATEGORY_ICONS: Record<NotificationCategory, string> = {
 };
 
 
+// IDs end up in `id` and `aria-controls`, which can't contain spaces
+// (aria-controls is a space-separated list), so reduce titles to a slug.
+function slug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
 // Feed items reuse the classic copy verbatim; only the first sentence is shown
 // in the feed, with the full text coming back in the detail view.
 function firstSentence(text: string): string {
@@ -48,7 +57,7 @@ function firstSentence(text: string): string {
 export function buildNotifications(): PlayNotification[] {
   const items: Omit<PlayNotification, 'unread'>[] = [
     ...projects.map((project) => ({
-      id: `projects-${project.name}`,
+      id: `projects-${slug(project.name)}`,
       category: 'projects' as const,
       title: project.name,
       body: firstSentence(project.description),
@@ -56,14 +65,14 @@ export function buildNotifications(): PlayNotification[] {
       detail: { kind: 'project' as const, project },
     })),
     ...stats.map((stat) => ({
-      id: `impact-${stat.label}`,
+      id: `impact-${slug(stat.label)}`,
       category: 'impact' as const,
       title: stat.value,
       body: stat.label,
       meta: `Impact · ${stat.source}`,
     })),
     ...customerStories.map((story) => ({
-      id: `work-${story.heading}`,
+      id: `work-${slug(story.heading)}`,
       category: 'work' as const,
       title: story.heading,
       body: firstSentence(story.body),
@@ -71,7 +80,7 @@ export function buildNotifications(): PlayNotification[] {
       detail: { kind: 'story' as const, story },
     })),
     ...[...timeline].reverse().map((entry) => ({
-      id: `career-${entry.period}`,
+      id: `career-${slug(entry.period)}`,
       category: 'career' as const,
       title: entry.label,
       body: '',
