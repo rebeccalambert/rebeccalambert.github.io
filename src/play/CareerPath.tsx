@@ -65,8 +65,16 @@ export default function CareerPath() {
     const path = pathRef.current;
     const marker = markerRef.current;
     if (!path || !marker) return;
+    const motionPath = { path, align: path, alignOrigin: [0.5, 0.5], start: from, end: to };
+    // Instant moves (reduced motion) go through gsap.set: a zero-duration tween
+    // renders inside gsap.to(), so an onUpdate reading `tween` would throw.
+    if (duration === 0) {
+      gsap.set(marker, { motionPath: { ...motionPath, start: to }, overwrite: true });
+      markerProgress.current = to;
+      return;
+    }
     const tween = gsap.to(marker, {
-      motionPath: { path, align: path, alignOrigin: [0.5, 0.5], start: from, end: to },
+      motionPath,
       duration,
       ease,
       overwrite: true,
@@ -74,7 +82,6 @@ export default function CareerPath() {
         markerProgress.current = from + (to - from) * tween.ratio;
       },
     });
-    return tween;
   };
 
   // Entrance: the path draws itself left to right, each stop pops in as the
@@ -88,7 +95,6 @@ export default function CareerPath() {
 
       if (!prefersMotion()) {
         placeMarker(end, end, 0);
-        markerProgress.current = end;
         return;
       }
 
@@ -118,7 +124,6 @@ export default function CareerPath() {
     const from = markerProgress.current;
     const duration = prefersMotion() ? Math.min(1.6, Math.max(0.4, Math.abs(to - from) * 2.4)) : 0;
     placeMarker(from, to, duration);
-    if (!prefersMotion()) markerProgress.current = to;
   };
 
   // ←/→ (and Home/End) walk the timeline and move focus with the selection.
