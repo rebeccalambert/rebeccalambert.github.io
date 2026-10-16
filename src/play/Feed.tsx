@@ -160,7 +160,7 @@ export default function Feed() {
           Notifications{' '}
           {/* Always rendered during the intro — its tweens target the badge
               when the timeline is built, before the count reaches 1. */}
-          {(!introDone || shownBadge > 0) && <span className="play-feed__badge">{shownBadge} new</span>}
+          {(!introDone || shownBadge > 0) && <span className="play-feed__badge">{shownBadge} unread</span>}
         </h2>
         {!introDone && (
           <button
