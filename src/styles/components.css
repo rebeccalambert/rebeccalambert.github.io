@@ -376,8 +376,15 @@
   }
 }
 
-/* Play mode load failure (PlayModeErrorBoundary). Lives here, not in
-   play.css, because play.css arrives with the chunk that failed. */
+/* Play mode loading + load-failure states. They live here, not in play.css,
+   because they show before (or instead of) the chunk that carries play.css. */
+.play-loading {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-3);
+  color: var(--color-text-muted);
+}
+
 .play-error {
   max-width: var(--max-width);
   margin: 0 auto;
