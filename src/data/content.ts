@@ -40,7 +40,6 @@ export const timeline: TimelineEntry[] = [
   { period: '2020–2022', label: 'Pilotly' },
   { period: '2022–2025', label: 'LinkedIn' },
   { period: '2025–2026', label: 'Volunteer year abroad' },
-  { period: '2026', label: 'ClauseCheck' },
 ];
 
 export interface EvalRow {

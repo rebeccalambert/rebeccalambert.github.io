@@ -6,16 +6,17 @@ import { linksFor } from './careerLinks';
 const VIEW_W = 1000;
 const VIEW_H = 300;
 
-// One point per timeline entry (oldest → newest), alternating high and low so
-// the path winds (mockup D). Coordinates are in viewBox units.
-const POINTS: [number, number][] = [
-  [60, 205],
-  [235, 90],
-  [415, 210],
-  [590, 85],
-  [770, 205],
-  [940, 95],
-];
+// One point per timeline entry (oldest → newest), evenly spaced and
+// alternating low/high so the path winds (mockup D). Derived from the entry
+// count so adding or removing a job in content.ts keeps the curve valid.
+const X_START = 60;
+const X_END = 940;
+const Y_LOW = 205;
+const Y_HIGH = 90;
+const POINTS: [number, number][] = timeline.map((_, i) => [
+  X_START + (i * (X_END - X_START)) / Math.max(timeline.length - 1, 1),
+  i % 2 === 0 ? Y_LOW : Y_HIGH,
+]);
 
 /** Smooth path through every point: each segment is a cubic with flat handles. */
 function pathThrough(points: [number, number][]): string {
