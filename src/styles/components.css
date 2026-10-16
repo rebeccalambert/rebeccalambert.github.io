@@ -21,6 +21,83 @@
   font-size: 1.1em;
 }
 
+/* Play mode toggle — the one deliberately loud element in the header, so it
+   reads as "a different way to view this site", not another setting.
+   Dark text on the gradient passes AA in both themes (lowest stop ~6:1). */
+.play-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: linear-gradient(135deg, #ff8ad1, #b794ff 50%, #6ea2ff);
+  color: #15181e;
+  font-weight: 700;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.play-toggle[aria-pressed='true'] {
+  border-color: var(--color-text);
+  box-shadow: 0 0 0 3px color-mix(in srgb, #b794ff 40%, transparent);
+}
+
+.play-toggle__icon {
+  display: inline-block;
+  font-size: 1.1em;
+}
+
+.play-toggle__state {
+  font-size: 0.75em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgb(255 255 255 / 0.55);
+  border-radius: 999px;
+  padding: 0 var(--space-2);
+}
+
+/* Small screens: muted, but text stays at full AA contrast — it's still
+   telling you something, just not inviting a click. */
+.play-toggle-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.play-toggle--blocked {
+  background: var(--color-bg-raised);
+  color: var(--color-text-muted);
+  border: 2px dashed var(--color-border);
+  cursor: help;
+}
+
+.play-toggle--blocked .play-toggle__state {
+  background: var(--color-border);
+  color: var(--color-text);
+}
+
+.play-toggle__hint {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  z-index: 10;
+  width: max-content;
+  max-width: 15rem;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  background: var(--color-inverse-bg);
+  color: var(--color-inverse-text);
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.25);
+}
+
+.play-toggle__hint[hidden] {
+  display: none;
+}
+
 /* Hero */
 .hero__title {
   font-size: var(--text-xl);
@@ -297,4 +374,49 @@
   .impact__stats {
     grid-template-columns: 1fr;
   }
+}
+
+/* Play mode loading + load-failure states. They live here, not in play.css,
+   because they show before (or instead of) the chunk that carries play.css. */
+.play-loading {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-3);
+  color: var(--color-text-muted);
+}
+
+.play-error {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-3);
+}
+
+.play-error h2 {
+  font-size: var(--text-xl);
+  margin: 0 0 var(--space-2);
+}
+
+.play-error p {
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.play-error__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.play-error__actions button {
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg-raised);
+  cursor: pointer;
+}
+
+.play-error__actions button:first-child {
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+  border-color: transparent;
 }

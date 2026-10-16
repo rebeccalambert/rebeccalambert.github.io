@@ -1,3 +1,19 @@
+export interface ProfileLink {
+  label: string;
+  href: string;
+  /** Suggested filename for a download link. */
+  download?: string;
+  /** Opens in a new tab. */
+  external?: boolean;
+}
+
+export const profileLinks: ProfileLink[] = [
+  { label: 'Resume', href: '/images/RebeccaLai_Resume_2026.pdf', download: 'RebeccaLai_Resume' },
+  { label: 'Email', href: 'mailto:rlambert.w@gmail.com' },
+  { label: 'GitHub', href: 'https://github.com/rebeccalambert', external: true },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/rebeccajlambert/', external: true },
+];
+
 export interface Stat {
   value: string;
   label: string;
@@ -16,15 +32,17 @@ export const stats: Stat[] = [
 export interface TimelineEntry {
   period: string;
   label: string;
+  /** School or training rather than a job — Play mode shows a 🎓 for these. */
+  education?: boolean;
 }
 
 export const timeline: TimelineEntry[] = [
+  { period: '2016', label: 'UC Berkeley (BA Cognitive Science)', education: true },
   { period: '2016–2019', label: 'Penumbra (regulatory affairs)' },
-  { period: '2019', label: 'App Academy' },
+  { period: '2019', label: 'App Academy', education: true },
   { period: '2020–2022', label: 'Pilotly' },
   { period: '2022–2025', label: 'LinkedIn' },
   { period: '2025–2026', label: 'Volunteer year abroad' },
-  { period: '2026', label: 'ClauseCheck' },
 ];
 
 export interface EvalRow {
