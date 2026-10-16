@@ -35,6 +35,7 @@ export interface TimelineEntry {
 }
 
 export const timeline: TimelineEntry[] = [
+  { period: '2016', label: 'UC Berkeley (BA Cognitive Science)' },
   { period: '2016–2019', label: 'Penumbra (regulatory affairs)' },
   { period: '2019', label: 'App Academy' },
   { period: '2020–2022', label: 'Pilotly' },
