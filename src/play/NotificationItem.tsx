@@ -17,7 +17,7 @@ export default function NotificationItem({
   onToggle: (id: string) => void;
   onRead: (id: string) => void;
 }) {
-  const { id, category, title, body, meta, detail } = notification;
+  const { id, category, title, body, meta, detail, icon } = notification;
   const detailId = `${id}-detail`;
 
   // Spans (not <p>) because this content sits inside a <button> when the row
@@ -25,7 +25,7 @@ export default function NotificationItem({
   const rowContent = (
     <>
       <span className="note__icon" aria-hidden="true">
-        {CATEGORY_ICONS[category]}
+        {icon ?? CATEGORY_ICONS[category]}
       </span>
       <span className="note__text">
         <span className="note__line">

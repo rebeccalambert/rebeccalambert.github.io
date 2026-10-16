@@ -12,6 +12,8 @@ export interface PlayNotification {
   body: string;
   /** Small grey line under the text, e.g. "Impact · LinkedIn". */
   meta: string;
+  /** Overrides the category icon, e.g. 🎓 for school entries in Career. */
+  icon?: string;
   unread: boolean;
   /** Full content shown when the row is expanded. Only set when it adds something the row doesn't already show. */
   detail?: NotificationDetail;
@@ -87,6 +89,7 @@ const careerItem = (entry: TimelineEntry): FeedItem => ({
   title: entry.label,
   body: '',
   meta: `Career · ${entry.period}`,
+  icon: entry.education ? '🎓' : undefined,
 });
 
 /**

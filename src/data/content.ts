@@ -32,12 +32,14 @@ export const stats: Stat[] = [
 export interface TimelineEntry {
   period: string;
   label: string;
+  /** School or training rather than a job — Play mode shows a 🎓 for these. */
+  education?: boolean;
 }
 
 export const timeline: TimelineEntry[] = [
-  { period: '2016', label: 'UC Berkeley (BA Cognitive Science)' },
+  { period: '2016', label: 'UC Berkeley (BA Cognitive Science)', education: true },
   { period: '2016–2019', label: 'Penumbra (regulatory affairs)' },
-  { period: '2019', label: 'App Academy' },
+  { period: '2019', label: 'App Academy', education: true },
   { period: '2020–2022', label: 'Pilotly' },
   { period: '2022–2025', label: 'LinkedIn' },
   { period: '2025–2026', label: 'Volunteer year abroad' },
