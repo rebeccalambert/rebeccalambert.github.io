@@ -1,4 +1,4 @@
-import { customerStories, projects, stats, timeline } from '../data/content';
+import { customerStories, projects, stats, timeline, type CustomerStory, type Project } from '../data/content';
 
 export type NotificationCategory = 'projects' | 'impact' | 'work' | 'career';
 
@@ -12,7 +12,22 @@ export interface PlayNotification {
   /** Small grey line under the text, e.g. "Impact · LinkedIn". */
   meta: string;
   unread: boolean;
+  /** Full content shown when the row is expanded. Only set when it adds something the row doesn't already show. */
+  detail?: NotificationDetail;
 }
+
+interface ProjectDetail {
+  kind: 'project';
+  project: Project;
+}
+
+interface StoryDetail {
+  kind: 'story';
+  story: CustomerStory;
+}
+
+// A union needs `type`; each member is an interface.
+export type NotificationDetail = ProjectDetail | StoryDetail;
 
 export const CATEGORY_ICONS: Record<NotificationCategory, string> = {
   projects: '🚀',
@@ -40,6 +55,7 @@ export function buildNotifications(): PlayNotification[] {
       title: project.name,
       body: firstSentence(project.description),
       meta: `Project · ${project.stack}`,
+      detail: { kind: 'project' as const, project },
     })),
     ...stats.map((stat) => ({
       id: `impact-${stat.label}`,
@@ -54,6 +70,7 @@ export function buildNotifications(): PlayNotification[] {
       title: story.heading,
       body: firstSentence(story.body),
       meta: `How I work · ${story.source}`,
+      detail: { kind: 'story' as const, story },
     })),
     ...[...timeline].reverse().map((entry) => ({
       id: `career-${entry.period}`,

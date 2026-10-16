@@ -4,7 +4,7 @@ import FilterChips from './FilterChips';
 import { filterLabel, type FeedFilter } from './filters';
 import { Flip } from './gsapPlugins';
 import NotificationItem from './NotificationItem';
-import { buildNotifications } from './notifications';
+import { buildNotifications, type PlayNotification } from './notifications';
 
 const notifications = buildNotifications();
 const unreadCount = notifications.filter((n) => n.unread).length;
@@ -23,10 +23,18 @@ export default function Feed() {
   const [introDone, setIntroDone] = useState(() => !prefersMotion());
   const [badgeCount, setBadgeCount] = useState(() => (introDone ? unreadCount : 0));
   const [filter, setFilter] = useState<FeedFilter>('all');
-  const flipState = useRef<Flip.FlipState | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [readIds, setReadIds] = useState<ReadonlySet<string>>(() => new Set());
+  // Positions recorded just before a filter or expand change, plus which kind
+  // of change it was — the two animate differently.
+  const pendingFlip = useRef<{ state: Flip.FlipState; kind: 'filter' | 'expand' } | null>(null);
 
   const isShown = (category: string) => filter === 'all' || filter === category;
   const shownCount = notifications.filter((n) => isShown(n.category)).length;
+  const isUnread = (n: PlayNotification) => n.unread && !readIds.has(n.id);
+  const unreadNow = notifications.filter(isUnread).length;
+  // During the intro the badge counts up on its own; afterwards it tracks reads.
+  const shownBadge = introDone ? unreadNow : badgeCount;
 
   // Runs when the intro ends, whether it played out or was skipped.
   const onIntroComplete = () => {
@@ -77,28 +85,66 @@ export default function Feed() {
   // Filtering: every item stays rendered and non-matching ones get `hidden`,
   // so Flip can record positions before the change and animate leavers out,
   // enterers in, and survivors sliding to their new spots.
+  const recordFlip = (kind: 'filter' | 'expand') => {
+    if (!prefersMotion() || !feedRef.current) return;
+    pendingFlip.current = { state: Flip.getState(feedRef.current.querySelectorAll('.note')), kind };
+  };
+
   const changeFilter = (next: FeedFilter) => {
-    if (next === filter || !feedRef.current) return;
-    if (prefersMotion()) flipState.current = Flip.getState(feedRef.current.querySelectorAll('.note'));
+    if (next === filter) return;
+    recordFlip('filter');
     setFilter(next);
+  };
+
+  // Accordion: opening one row closes any other, so the feed stays scannable.
+  const toggleExpanded = (id: string) => {
+    recordFlip('expand');
+    setExpandedId((current) => (current === id ? null : id));
+  };
+
+  // Opening or clicking a notification marks it read: the dot shrinks away,
+  // then the state updates (badge counts down, unread tint fades via CSS).
+  const markRead = (id: string) => {
+    const notification = notifications.find((n) => n.id === id);
+    if (!notification || !isUnread(notification)) return;
+    const commit = () => {
+      setReadIds((prev) => new Set(prev).add(id));
+      const badge = feedRef.current?.querySelector('.play-feed__badge');
+      if (badge && prefersMotion()) {
+        gsap.fromTo(badge, { scale: 1.25 }, { scale: 1, duration: 0.3, ease: 'back.out(3)' });
+      }
+    };
+    const dot = feedRef.current?.querySelector(`[data-id="${CSS.escape(id)}"] .note__dot`);
+    if (!dot || !prefersMotion()) {
+      commit();
+      return;
+    }
+    if (gsap.isTweening(dot)) return; // already on its way out
+    gsap.to(dot, { scale: 0, autoAlpha: 0, duration: 0.25, ease: 'back.in(2)', onComplete: commit });
   };
 
   useGSAP(
     () => {
-      const state = flipState.current;
-      if (!state) return;
-      flipState.current = null;
-      Flip.from(state, {
-        duration: 0.5,
-        ease: 'power2.inOut',
-        absolute: true,
-        nested: true,
-        onEnter: (els) =>
-          gsap.fromTo(els, { autoAlpha: 0, scale: 0.92 }, { autoAlpha: 1, scale: 1, duration: 0.4, delay: 0.15 }),
-        onLeave: (els) => gsap.to(els, { autoAlpha: 0, scale: 0.92, duration: 0.25 }),
-      });
+      const pending = pendingFlip.current;
+      if (!pending) return;
+      pendingFlip.current = null;
+      if (pending.kind === 'filter') {
+        Flip.from(pending.state, {
+          duration: 0.5,
+          ease: 'power2.inOut',
+          absolute: true,
+          nested: true,
+          onEnter: (els) =>
+            gsap.fromTo(els, { autoAlpha: 0, scale: 0.92 }, { autoAlpha: 1, scale: 1, duration: 0.4, delay: 0.15 }),
+          onLeave: (els) => gsap.to(els, { autoAlpha: 0, scale: 0.92, duration: 0.25 }),
+        });
+      } else {
+        // scale: false animates real height instead of stretching the text, so
+        // the row grows open and everything below slides down to make room.
+        Flip.from(pending.state, { duration: 0.45, ease: 'power2.inOut', scale: false, nested: true });
+      }
     },
-    { scope: feedRef, dependencies: [filter] },
+    { scope: feedRef, dependencies: [filter, expandedId] },
   );
 
   return (
@@ -108,7 +154,10 @@ export default function Feed() {
           <span className="play-feed__bell" aria-hidden="true">
             🔔
           </span>{' '}
-          Notifications <span className="play-feed__badge">{badgeCount} new</span>
+          Notifications{' '}
+          {/* Always rendered during the intro — its tweens target the badge
+              when the timeline is built, before the count reaches 1. */}
+          {(!introDone || shownBadge > 0) && <span className="play-feed__badge">{shownBadge} new</span>}
         </h2>
         {!introDone && (
           <button
@@ -133,6 +182,10 @@ export default function Feed() {
             key={notification.id}
             notification={notification}
             hidden={!isShown(notification.category)}
+            unread={isUnread(notification)}
+            expanded={expandedId === notification.id}
+            onToggle={toggleExpanded}
+            onRead={markRead}
           />
         ))}
       </ol>
