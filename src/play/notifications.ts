@@ -1,4 +1,5 @@
-import { customerStories, projects, stats, timeline, type CustomerStory, type Project } from '../data/content';
+import { projects, timeline, type CustomerStory, type Project, type Stat, type TimelineEntry } from '../data/content';
+import { linksFor } from './careerLinks';
 
 export type NotificationCategory = 'projects' | 'impact' | 'work' | 'career';
 
@@ -36,7 +37,6 @@ export const CATEGORY_ICONS: Record<NotificationCategory, string> = {
   career: '💼',
 };
 
-
 // IDs end up in `id` and `aria-controls`, which can't contain spaces
 // (aria-controls is a space-separated list), so reduce titles to a slug.
 function slug(text: string): string {
@@ -53,40 +53,63 @@ function firstSentence(text: string): string {
   return end === -1 ? text : text.slice(0, end + 1);
 }
 
-/** Builds the Play mode feed from content.ts — same facts as the classic view, newest first. */
+type FeedItem = Omit<PlayNotification, 'unread'>;
+
+const projectItem = (project: Project): FeedItem => ({
+  id: `projects-${slug(project.name)}`,
+  category: 'projects',
+  title: project.name,
+  body: firstSentence(project.description),
+  meta: `Project · ${project.stack}`,
+  detail: { kind: 'project', project },
+});
+
+const statItem = (stat: Stat): FeedItem => ({
+  id: `impact-${slug(stat.label)}`,
+  category: 'impact',
+  title: stat.value,
+  body: stat.label,
+  meta: `Impact · ${stat.source}`,
+});
+
+const storyItem = (story: CustomerStory): FeedItem => ({
+  id: `work-${slug(story.heading)}`,
+  category: 'work',
+  title: story.heading,
+  body: firstSentence(story.body),
+  meta: `How I work · ${story.source}`,
+  detail: { kind: 'story', story },
+});
+
+const careerItem = (entry: TimelineEntry): FeedItem => ({
+  id: `career-${slug(entry.period)}`,
+  category: 'career',
+  title: entry.label,
+  body: '',
+  meta: `Career · ${entry.period}`,
+});
+
+/**
+ * Builds the Play mode feed from content.ts — same facts as the classic view,
+ * told oldest to newest: each career stop, then the impact, stories, and
+ * projects tied to it (same matching as the Career view), then any projects
+ * not tied to a job, oldest first.
+ */
 export function buildNotifications(): PlayNotification[] {
-  const items: Omit<PlayNotification, 'unread'>[] = [
-    ...projects.map((project) => ({
-      id: `projects-${slug(project.name)}`,
-      category: 'projects' as const,
-      title: project.name,
-      body: firstSentence(project.description),
-      meta: `Project · ${project.stack}`,
-      detail: { kind: 'project' as const, project },
-    })),
-    ...stats.map((stat) => ({
-      id: `impact-${slug(stat.label)}`,
-      category: 'impact' as const,
-      title: stat.value,
-      body: stat.label,
-      meta: `Impact · ${stat.source}`,
-    })),
-    ...customerStories.map((story) => ({
-      id: `work-${slug(story.heading)}`,
-      category: 'work' as const,
-      title: story.heading,
-      body: firstSentence(story.body),
-      meta: `How I work · ${story.source}`,
-      detail: { kind: 'story' as const, story },
-    })),
-    ...[...timeline].reverse().map((entry) => ({
-      id: `career-${slug(entry.period)}`,
-      category: 'career' as const,
-      title: entry.label,
-      body: '',
-      meta: `Career · ${entry.period}`,
-    })),
-  ];
+  const items: FeedItem[] = [];
+  const placed = new Set<Project>();
+
+  for (const entry of timeline) {
+    const links = linksFor(entry);
+    items.push(careerItem(entry), ...links.stats.map(statItem), ...links.stories.map(storyItem));
+    for (const project of links.projects) {
+      items.push(projectItem(project));
+      placed.add(project);
+    }
+  }
+  // content.ts lists projects newest first; the feed runs oldest first.
+  const unplaced = projects.filter((project) => !placed.has(project)).reverse();
+  items.push(...unplaced.map(projectItem));
 
   // Every row that opens starts unread, and only those: opening is how a row
   // gets read, so every dot can be cleared by mouse or keyboard.
