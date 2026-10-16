@@ -1,3 +1,19 @@
+export interface ProfileLink {
+  label: string;
+  href: string;
+  /** Suggested filename for a download link. */
+  download?: string;
+  /** Opens in a new tab. */
+  external?: boolean;
+}
+
+export const profileLinks: ProfileLink[] = [
+  { label: 'Resume', href: '/images/RebeccaLai_Resume_2026.pdf', download: 'RebeccaLai_Resume' },
+  { label: 'Email', href: 'mailto:rlambert.w@gmail.com' },
+  { label: 'GitHub', href: 'https://github.com/rebeccalambert', external: true },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/rebeccajlambert/', external: true },
+];
+
 export interface Stat {
   value: string;
   label: string;

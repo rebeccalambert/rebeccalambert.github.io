@@ -1,0 +1,176 @@
+/* Play mode — loaded only with the lazy Play chunk.
+   Candy palette (mockup D) + sticker accents (mockup C) on interactive elements only. */
+
+/* [data-theme] in the selector so this outranks the light/dark tokens in
+   variables.css regardless of stylesheet order. */
+:root[data-mode='play'][data-theme] {
+  --color-bg: #fff6fb;
+  --color-bg-raised: #ffffff;
+  --color-text: #2a1f3d;
+  --color-text-muted: #5f5078;
+  --color-border: #eadff5;
+  --color-accent: #b3238a;
+  --color-accent-text: #ffffff;
+  --color-focus-ring: #7c3aed;
+  --color-inverse-bg: #2a1f3d;
+  --color-inverse-text: #ffffff;
+
+  --font-sans: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Fredoka', 'Nunito', sans-serif;
+
+  /* Sticker ink: outlines + hard shadows on things you can click or drag. */
+  --play-ink: #2a1f3d;
+
+  --candy-pink: #ffc4e4;
+  --candy-lilac: #dccdff;
+  --candy-mint: #bff0dc;
+  --candy-butter: #ffeeb0;
+  --candy-sky: #d9ecff;
+
+  --play-radius: 24px;
+  --play-shadow-soft: 0 10px 30px rgb(183 148 255 / 0.22);
+
+  color-scheme: light;
+}
+
+/* Soft candy blobs behind everything. A fixed layer (not the body background)
+   so it can fade in — gradients themselves can't transition. */
+:root[data-mode='play'] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(38rem 26rem at 8% 4%, #ffd6ec, transparent 70%),
+    radial-gradient(32rem 26rem at 96% 22%, #e3d9ff, transparent 70%),
+    radial-gradient(40rem 32rem at 40% 96%, #d2f5e8, transparent 70%);
+  animation: play-blobs-in 600ms ease both;
+}
+
+@keyframes play-blobs-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The light/dark choice doesn't apply to Play mode's single palette. */
+:root[data-mode='play'] .theme-toggle {
+  display: none;
+}
+
+:root[data-mode='play'] .site-header__name {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+/* Sticker accent: the visual cue for "you can touch this". */
+.is-interactive {
+  border: 2.5px solid var(--play-ink);
+  box-shadow: 4px 4px 0 var(--play-ink);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.is-interactive:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--play-ink);
+}
+
+.is-interactive:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--play-ink);
+}
+
+/* Layout: sticky profile card + feed panel (mockup E structure). */
+.play-layout {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-3) var(--space-7);
+  display: grid;
+  grid-template-columns: 17rem 1fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.play-layout h1,
+.play-layout h2,
+.play-layout h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.play-profile {
+  position: sticky;
+  top: var(--space-4);
+  background: var(--color-bg-raised);
+  border-radius: var(--play-radius);
+  box-shadow: var(--play-shadow-soft);
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.play-profile__photo {
+  width: 7rem;
+  height: 7rem;
+  margin: 0 auto var(--space-3);
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--color-bg-raised);
+  outline: 4px solid var(--candy-lilac);
+}
+
+.play-profile h1 {
+  font-size: var(--text-xl);
+  margin: 0;
+}
+
+.play-profile__title {
+  color: var(--color-text-muted);
+  margin: var(--space-1) 0 var(--space-4);
+}
+
+.play-profile__links {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.play-profile__links a {
+  display: block;
+  padding: var(--space-2);
+  border-radius: 999px;
+  color: var(--color-text);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.play-profile__links li:nth-child(1) a { background: var(--candy-pink); }
+.play-profile__links li:nth-child(2) a { background: var(--candy-lilac); }
+.play-profile__links li:nth-child(3) a { background: var(--candy-mint); }
+.play-profile__links li:nth-child(4) a { background: var(--candy-butter); }
+
+.play-feed {
+  min-height: 70vh;
+  background: var(--color-bg-raised);
+  border-radius: var(--play-radius);
+  box-shadow: var(--play-shadow-soft);
+  overflow: hidden;
+}
+
+.play-feed__header {
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.play-feed__header h2 {
+  font-size: var(--text-xl);
+  margin: 0;
+}
+
+.play-loading {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-3);
+  color: var(--color-text-muted);
+}

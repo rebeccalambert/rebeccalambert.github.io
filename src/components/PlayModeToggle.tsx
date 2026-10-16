@@ -1,6 +1,14 @@
 import { useId, useRef, useState, type KeyboardEvent, type MouseEvent } from 'react';
 import { gsap, MOTION_OK, prefersMotion, useGSAP } from '../lib/gsap';
 import { usePlayMode } from '../lib/playMode';
+import { loadPlayMode } from '../play/loadPlayMode';
+
+// Hovering or focusing the toggle starts downloading the Play chunk, so it's
+// usually ready by the time the exit animation finishes. Errors are ignored
+// here; React.lazy retries the import and surfaces any real failure.
+function prefetchPlayMode() {
+  loadPlayMode().catch(() => {});
+}
 
 export default function PlayModeToggle() {
   const { isPlayMode, canPlay, setPlayMode } = usePlayMode();
@@ -67,7 +75,8 @@ export default function PlayModeToggle() {
       className="play-toggle-wrap"
       onMouseEnter={() => {
         wiggle();
-        if (!canPlay) setShowHint(true);
+        if (canPlay) prefetchPlayMode();
+        else setShowHint(true);
       }}
       onMouseLeave={() => setShowHint(false)}
       onKeyDown={handleKeyDown}
@@ -82,7 +91,7 @@ export default function PlayModeToggle() {
         aria-pressed={isPlayMode}
         aria-describedby={canPlay ? undefined : hintId}
         onClick={handleClick}
-        onFocus={() => !canPlay && setShowHint(true)}
+        onFocus={() => (canPlay ? prefetchPlayMode() : setShowHint(true))}
         onBlur={() => setShowHint(false)}
       >
         <span aria-hidden="true" className="play-toggle__icon">

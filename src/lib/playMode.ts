@@ -32,13 +32,21 @@ export function getInitialPlayMode(): boolean {
   }
 }
 
-export function applyPlayMode(isPlayMode: boolean): void {
-  document.documentElement.setAttribute('data-mode', isPlayMode ? 'play' : 'classic');
+export function persistPlayMode(isPlayMode: boolean): void {
   try {
     sessionStorage.setItem(STORAGE_KEY, isPlayMode ? 'on' : 'off');
   } catch {
     // Non-fatal: mode still applies, just won't survive a reload.
   }
+}
+
+/**
+ * Switches the page's color scheme. Called when the main content actually swaps
+ * (after the exit animation), not when the toggle is pressed, so the classic
+ * sections don't recolor while they're animating out.
+ */
+export function applyDocumentMode(isPlayMode: boolean): void {
+  document.documentElement.setAttribute('data-mode', isPlayMode ? 'play' : 'classic');
 }
 
 interface PlayModeContextValue {

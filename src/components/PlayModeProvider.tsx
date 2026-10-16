@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { applyPlayMode, getInitialPlayMode, PlayModeContext, useCanPlay } from '../lib/playMode';
+import { getInitialPlayMode, persistPlayMode, PlayModeContext, useCanPlay } from '../lib/playMode';
 
 export default function PlayModeProvider({ children }: { children: ReactNode }) {
   const canPlay = useCanPlay();
@@ -16,7 +16,7 @@ export default function PlayModeProvider({ children }: { children: ReactNode }) 
   }
 
   useEffect(() => {
-    applyPlayMode(isPlayMode);
+    persistPlayMode(isPlayMode);
   }, [isPlayMode]);
 
   const value = useMemo(

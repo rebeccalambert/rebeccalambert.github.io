@@ -1,13 +1,8 @@
+import MainContent from './components/MainContent';
 import PlayModeProvider from './components/PlayModeProvider';
 import PlayModeToggle from './components/PlayModeToggle';
 import SkipLink from './components/SkipLink';
 import ThemeToggle from './components/ThemeToggle';
-import About from './sections/About';
-import Contact from './sections/Contact';
-import CustomerWork from './sections/CustomerWork';
-import Hero from './sections/Hero';
-import Impact from './sections/Impact';
-import Projects from './sections/Projects';
 
 export default function App() {
   return (
@@ -22,14 +17,7 @@ export default function App() {
           <ThemeToggle />
         </div>
       </header>
-      <main id="main">
-        <Hero />
-        <Impact />
-        <Projects />
-        <CustomerWork />
-        <About />
-        <Contact />
-      </main>
+      <MainContent />
       <footer className="site-footer">
         <p>&copy; {new Date().getFullYear()} Rebecca Lai</p>
       </footer>
